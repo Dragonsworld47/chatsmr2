@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat Anónimo</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f4f4; }
+        #chat-container { width: 400px; margin: 40px auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #aaa; padding: 20px; }
+        #messages { height: 250px; overflow-y: auto; border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; background: #fafafa; }
+        #input-container { display: flex; }
+        #input-container input[type="text"] { flex: 1; padding: 8px; }
+        #input-container button { padding: 8px 16px; }
+        #name-form { display: flex; flex-direction: column; align-items: center; }
+        #name-form input { margin-bottom: 10px; padding: 8px; }
+    </style>
+</head>
+<body>
+<div id="chat-container">
+    <div id="name-section">
+        <form id="name-form">
+            <label for="username">Elige un nombre:</label>
+            <input type="text" id="username" maxlength="20" required autocomplete="off">
+            <button type="submit">Entrar al chat</button>
+        </form>
+    </div>
+    <div id="chat-section" style="display:none;">
+        <div id="messages"></div>
+        <form id="message-form">
+            <div id="input-container">
+                <input type="text" id="input" maxlength="200" autocomplete="off" placeholder="Escribe un mensaje...">
+                <button type="submit">Enviar</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    const socket = io();
+    const nameSection = document.getElementById('name-section');
+    const chatSection = document.getElementById('chat-section');
+    const nameForm = document.getElementById('name-form');
+    const usernameInput = document.getElementById('username');
+    const messagesDiv = document.getElementById('messages');
+    const messageForm = document.getElementById('message-form');
+    const messageInput = document.getElementById('input');
+    let username = '';
+
+    nameForm.onsubmit = function(e) {
+        e.preventDefault();
+        username = usernameInput.value.trim();
+        if (username) {
+            nameSection.style.display = 'none';
+            chatSection.style.display = 'block';
+            socket.emit('set username', username);
+            messageInput.focus();
+        }
+    };
+
+    messageForm.onsubmit = function(e) {
+        e.preventDefault();
+        const text = messageInput.value.trim();
+        if (text) {
+            socket.emit('chat message', text);
+            messageInput.value = '';
+            messageInput.focus();
+        }
+    };
+
+    socket.on('chat message', function(msg) {
+        const div = document.createElement('div');
+        const nameSpan = document.createElement('span');
+        nameSpan.textContent = msg.user + ': ';
+        nameSpan.style.color = msg.color;
+        nameSpan.style.fontWeight = 'bold';
+        div.appendChild(nameSpan);
+        div.appendChild(document.createTextNode(msg.text));
+        messagesDiv.appendChild(div);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    });
+</script>
+</body>
+</html>

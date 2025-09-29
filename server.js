@@ -1,18 +1,16 @@
 // Simple chat server using Node.js and Socket.IO
 const express = require('express');
 const http = require('http');
+const express = require('express');
+const http = require('http');
 const { Server } = require('socket.io');
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
-app.use(express.static(__dirname + '/asd'));
-
-// Redirigir la raíz '/' al index.html de asd
-app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/asd/index.html');
-});
+// Servir archivos estáticos desde la raíz del proyecto
+app.use(express.static(__dirname));
 
 // Función para generar color aleatorio
 function getRandomColor() {
@@ -49,7 +47,15 @@ io.on('connection', (socket) => {
   });
 });
 
+// Servir index.html en la raíz
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/index.html');
+});
+
 const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});
 server.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });

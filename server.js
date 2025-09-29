@@ -9,6 +9,11 @@ const io = new Server(server);
 
 app.use(express.static(__dirname + '/asd'));
 
+// Redirigir la raíz '/' al index.html de asd
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/asd/index.html');
+});
+
 // Función para generar color aleatorio
 function getRandomColor() {
   const colors = [

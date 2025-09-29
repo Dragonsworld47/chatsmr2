@@ -1,8 +1,6 @@
 // Simple chat server using Node.js and Socket.IO
 const express = require('express');
 const http = require('http');
-const express = require('express');
-const http = require('http');
 const { Server } = require('socket.io');
 
 const app = express();

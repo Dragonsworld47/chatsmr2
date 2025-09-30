@@ -13,10 +13,10 @@ app.use(express.static(__dirname));
 // Función para generar color aleatorio
 function getRandomColor() {
   const colors = [
-    '#e6194b', '#3cb44b', '#ffe119', '#4363d8', '#f58231',
-    '#911eb4', '#46f0f0', '#f032e6', '#bcf60c', '#fabebe',
-    '#008080', '#e6beff', '#9a6324', '#fffac8', '#800000',
-    '#aaffc3', '#808000', '#ffd8b1', '#000075', '#808080'
+    '#e6194b', '#3cb44b', '#ff00c8ff', '#4363d8', '#f58231',
+    '#911eb4', '#46f0f0', '#f032e6', '#bcf60c', '#3510b9ff',
+    '#008080', '#350353ff', '#9a6324', '#ffea00ff', '#800000',
+    '#04ff50ff', '#808000', '#ffd8b1', '#000075', '#00f891ff'
   ];
   return colors[Math.floor(Math.random() * colors.length)];
 }
